@@ -510,12 +510,17 @@ class Dependency(object):
 
     def wait_process_appear(self, process_name):
         """Wait for a process to appear."""
-        while True:
+        count = 0
+        while count != 100:
             time.sleep(1)
 
             for line in self.a.execute("tasklist")["stdout"].split("\n"):
                 if line.lower().startswith(process_name.lower()):
+                    log.debug("Run test is successful")
                     return
+                else:
+                     count += 1
+        log.debug("Test of working failed, it's possible the program has not been installed correctly")
 
     def wait_process_exit(self, process_name, timeout=None):
         """Wait for a process to exit."""
